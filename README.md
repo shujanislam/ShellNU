@@ -1,4 +1,4 @@
-# ShellNU ### (v0.0.1)
+# ShellNU (v0.0.1)
 ## _Basic shell to perform both linux/windows tasks_
 
 ShellNU is a basic shell to perform basic linux/windows commands on your machine (windows/linux).
