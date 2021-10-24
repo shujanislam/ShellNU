@@ -1,4 +1,5 @@
 # ShellNU (v0.0.1)
+[![Version](https://img.shields.io/badge/Version-v0.0.1-darkorange?style=flat)]()
 ## _Basic shell to perform both linux/windows tasks_
 
 ShellNU is a basic shell to perform basic linux/windows commands on your machine (windows/linux).
