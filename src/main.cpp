@@ -33,7 +33,14 @@ std::map<std::string, std::string> Help = {
     {"clear", "to clear the screen"},
     {"echo <string>", "to display a string in the shell"},
     {"rename <filename>", "to rename a filename"},
-    {"whoami", "returns the user of the machine"}
+    {"whoami", "returns the user of the machine"},
+    {"cat <filename>", "returns the content of a file"},
+    {"lscpu", "returns the cpu specifications"},
+    {"credits", "returns the creator of the ShellNU program"},
+    {"c <filename>", "compiles and runs a c program"},
+    {"cpp <filename>", "compiles and runs a c++ program"},
+    {"py <filename>", "compiles and runs a python program"},
+    {"nano <filename>", "to edit a file using nano text editor"}
 };
 
 void command_function();    // function which will contain all the commands
@@ -124,6 +131,13 @@ void command_function(){
             std::string echo_str = command.substr(command.find_first_of(" \t")+1);
             std::cout<<echo_str;
         }
+        // echo to write in a file
+        else if(command.rfind("write ") == 0){
+            std::string echo_str = command.substr(command.find_first_of(" \t")+1);
+            std::string text = echo_str.substr(0, echo_str.find(' '));
+            std::string file = echo_str.substr(echo_str.find_first_of(" \t")+2);
+            writeFile(text.c_str(), file.c_str());
+        }
         // to create a file
         else if(command.rfind("touch ") == 0){
             std::string file_name=command.substr(command.find_first_of(" \t")+1);
@@ -199,6 +213,67 @@ void command_function(){
         // returns the user of the machine
         else if(command == "whoami"){
             system("whoami");
+        }
+        // creating a directory
+        else if(command.rfind("mkdir ") == 0){
+            std::string dir_name = command.substr(command.find_first_of(" \t")+1);
+            std::string dir_command = "mkdir ";
+            char* directory_name = const_cast<char*>(dir_name.c_str());
+            char* mkdir_command = const_cast<char*>(dir_command.c_str());
+            strcat(mkdir_command, directory_name);
+            system(mkdir_command);
+            std::cout<<directory_name<<" was successfully created!";
+
+        }
+        else if(command == "ab"){
+            char name[50];
+            strcpy(name, "Shujan");
+            adminTerm(name);
+        }
+        // returns all the content of a file
+        else if(command.rfind("cat ") == 0){
+            std::string file_name = command.substr(command.find_first_of(" \t")+1);
+            catFile(file_name.c_str());
+        }
+
+        // function to return the cpu info of the user's pc
+        else if(command == "lscpu"){
+            if(os == "linux"){
+                system("lscpu");
+            }
+            else if(os == "windows"){
+                system("systeminfo");
+            }
+        }
+        // returns the coder of the ShellNU program
+        else if(command == "credits"){
+            std::cout<<"--------------{+} Coded By Shujan Islam {+}--------------\n";
+            std::cout<<"--------{+}  https://github.com/shujanislam/ShellNU {+}--------\n";
+        }
+        // function to run and compile c, c++ and python files
+        else if(command.rfind("c ") == 0){
+            std::string file_name = command.substr(command.find_first_of(" \t")+1);
+            cFileCompile(file_name.c_str());
+        }
+        else if(command.rfind("cpp ") == 0){
+            std::string file_name = command.substr(command.find_first_of(" \t")+1);
+            cppFileCompile(file_name.c_str());
+        }
+        else if(command.rfind("py ") == 0){
+            std::string file_name = command.substr(command.find_first_of(" \t")+1);
+            pythonCompile(file_name.c_str());
+        }
+        // end of the compiling functions
+
+        // nano command to use nano text editor
+        else if(command.rfind("nano ") == 0){
+            std::string file_name = command.substr(command.find_first_of(" \t") + 1);
+            char nano_command[10] = "nano ";
+            strcat(nano_command, file_name.c_str());
+            system(nano_command);
+        }
+        else if(command == "nano"){
+            system("nano");
         }
     }
 
