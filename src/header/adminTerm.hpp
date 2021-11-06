@@ -3,6 +3,7 @@
 #include<algorithm>     // for algorithmic stuff
 #include<fstream>       // for file stuff
 #include<string>        // for functions like substr()
+#include "encrypt.h"
 
 
 // Admin function starts from here (Giving more privilege)
@@ -31,6 +32,9 @@ void adminTerm(char username[50]){
         else if(admin_command == "whoami"){
             std::cout<<username;
         }
+        else if(admin_command == "clear"){
+            system("clear");
+        }
         // to create a file
         else if(admin_command.rfind("touch ") == 0){
             std::string file_name=admin_command.substr(admin_command.find_first_of(" \t")+1);
@@ -57,12 +61,37 @@ void adminTerm(char username[50]){
                 std::cout<<filename<<" was deleted successfully!";
             }
         }
+        // creating a directory
+        else if(admin_command.rfind("mkdir ") == 0){
+            std::string dir_name = admin_command.substr(admin_command.find_first_of(" \t")+1);
+            std::string dir_command = "mkdir ";
+            char* directory_name = const_cast<char*>(dir_name.c_str());
+            char* mkdir_command = const_cast<char*>(dir_command.c_str());
+            strcat(mkdir_command, directory_name);
+            system(mkdir_command);
+            std::cout<<directory_name<<" was successfully created!";
+
+        }
         // returns the working directory
         else if(admin_command == "pwd"){
             system("pwd");
         }
+        // takes input string and returns a base64 encoded string 
+        else if(admin_command == "b64"){
+            std::string text;
+            std::cout<<"Enter a string [with no spaces]:\n";
+            std::cin>>text;
+            std::cout<<base64_encode(text);
+        }
+        // a simple password generator
+        else if(admin_command == "pw gen"){
+            int num;
+            std::cout<<"Enter the length for your password:\n";
+            std::cin>>num;
+            pw_generator(num);
+        }
         else{
-            std::cout<<admin_command;
+            std::cout<<"command not added yet!";
         }
     }
 }
