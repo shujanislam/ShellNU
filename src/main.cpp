@@ -225,11 +225,6 @@ void command_function(){
             std::cout<<directory_name<<" was successfully created!";
 
         }
-        else if(command == "ab"){
-            char name[50];
-            strcpy(name, "Shujan");
-            adminTerm(name);
-        }
         // returns all the content of a file
         else if(command.rfind("cat ") == 0){
             std::string file_name = command.substr(command.find_first_of(" \t")+1);
