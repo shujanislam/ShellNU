@@ -1,5 +1,5 @@
-# ShellNU (v0.0.1)
-[![Version](https://img.shields.io/badge/Version-v0.0.1-darkorange?style=flat)]()
+# ShellNU
+[![Version](https://img.shields.io/badge/Version-v0.0.2-darkorange?style=flat)]()
 ## _Basic shell to perform both linux/windows tasks_
 
 ShellNU is a basic shell to perform basic linux/windows commands on your machine (windows/linux).
@@ -16,6 +16,7 @@ ShellNU is written in C and C++
 | touch | creates a file |
 | rm | deletes a file or a folder |
 | v | returns the version of ShellNU |
+| cat | returns the content of a file |
 | clear | clears the terminal screen |
 | echo | returns a string on the terminal screen |
 | whoami | returns the username |
@@ -23,6 +24,10 @@ ShellNU is written in C and C++
 | register | registers an admin for the shell |
 | login | login as an admin |
 | xt | to exit ShellNU |
+| lscpu | returns the cpu specifications |
+| credits | returns the creator of the ShellNU program |
+| nano | to edit a file using nano text editor |
+
 > Note: In the current version of ShellNU, register and login function won't work unless the program is working on the root ShellNU directory. Outside the ShellNU directory, login and register function won't work. After registering or logging in , you can change directory and continue your work.
 
 ## Installation
