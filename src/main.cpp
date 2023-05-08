@@ -18,6 +18,22 @@
 #endif
 #endif
 
+// to get the current directory
+#ifdef WINDOWS
+#include <direct.h>
+#define GetCurrentDir _getcwd
+#else
+#include <unistd.h>
+#define GetCurrentDir getcwd
+#endif
+
+std::string get_current_dir() {
+   char buff[FILENAME_MAX]; //create string buffer to hold path
+   GetCurrentDir( buff, FILENAME_MAX );
+   string current_working_dir(buff);
+   return current_working_dir;
+}
+
 // Map that contains all the help commands
 std::map<std::string, std::string> Help = {
     {"v", "to check the version of the terminal"},
@@ -40,7 +56,8 @@ std::map<std::string, std::string> Help = {
     {"c <filename>", "compiles and runs a c program"},
     {"cpp <filename>", "compiles and runs a c++ program"},
     {"py <filename>", "compiles and runs a python program"},
-    {"nano <filename>", "to edit a file using nano text editor"}
+    {"nano <filename>", "to edit a file using nano text editor"},
+    {"ffplay <filename>", "to play a video file using ffplay"}
 };
 
 void command_function();    // function which will contain all the commands
@@ -73,13 +90,13 @@ void command_function(){
     // while loop to take command inputs until the user enters xt command to exit
     while(command != "xt"){
         if(os == "linux"){
-            std::cout << "\n\033[1;33muser\033[0m@\033[1;31mlinux\033[0m:~";
+            std::cout << "\n\033[1;33muser\033[0m@\033[1;31mlinux\033[0m:~"<<get_current_dir()<<"\033[1;34m$\033[0m ";
         }
         else if(os == "windows"){
-            std::cout << "\n\033[1;33muser\033[0m@\033[1;31mwindows\033[0m:~";
+            std::cout << "\n\033[1;33muser\033[0m@\033[1;31mwindows\033[0m:~"<<get_current_dir()<<"\033[1;34m$\033[0m ";
         }
         else{
-            std::cout << "\n\033[1;33muser\033[0m@\033[1;31muser\033[0m:~";
+            std::cout << "\n\033[1;33muser\033[0m@\033[1;31muser\033[0m:~"<<get_current_dir()<<"\033[1;34m$\033[0m ";
         }
 
         std::getline(std::cin, command);
@@ -106,7 +123,7 @@ void command_function(){
         }
         // to check the version of ShellNU
         else if(command == "v"){
-            std::cout<<"Version: 0.0.1\nCopyright@2021";
+            std::cout<<"Version: 0.0.3\nCopyright@2023";
         }
         // to retrieve all the help commands
         else if(command == "help"){
@@ -243,6 +260,7 @@ void command_function(){
         // returns the coder of the ShellNU program
         else if(command == "credits"){
             std::cout<<"--------------{+} Coded By Shujan Islam {+}--------------\n";
+            std::cout<<"--------------{+} https://shujanislam.github.io {+}--------------\n";
             std::cout<<"--------{+}  https://github.com/shujanislam/ShellNU {+}--------\n";
         }
         // function to run and compile c, c++ and python files
@@ -267,6 +285,16 @@ void command_function(){
             strcat(nano_command, file_name.c_str());
             system(nano_command);
         }
+
+        //ffplay command to play a video file
+        else if(command.rfind("ffplay ") == 0){
+        	std::string file_name = command.substr(command.find_first_of(" \t") + 1);
+            char ffplay_command[10] = "ffplay ";
+            strcat(ffplay_command, file_name.c_str());
+            system(ffplay_command);
+        }
+
+        // nano command to open up nano editor
         else if(command == "nano"){
             system("nano");
         }
