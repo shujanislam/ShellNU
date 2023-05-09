@@ -5,7 +5,6 @@
 #include<string>        // for functions like substr()
 #include "encrypt.h"
 
-
 // Admin function starts from here (Giving more privilege)
 void adminTerm(char username[50]){
     std::string admin_command;

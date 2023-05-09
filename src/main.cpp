@@ -5,6 +5,7 @@
 #include<stdlib.h>
 #include<string>            // for some basic functions like substr()
 #include "header/file.h"    // header file that contains login/register functions
+#include "header/func.hpp"    // header file that contains all the shell functions
 
 // checking if the Operating System is Windows or Linux
 
@@ -123,7 +124,7 @@ void command_function(){
         }
         // to check the version of ShellNU
         else if(command == "v"){
-            std::cout<<"Version: 0.0.3\nCopyright@2023";
+            shellVersion();
         }
         // to retrieve all the help commands
         else if(command == "help"){
@@ -133,15 +134,7 @@ void command_function(){
         }
         // to clear the screen
         else if(command == "clear" || command == "cls"){
-            if(os == "linux"){
-                system("clear");
-            }
-            else if(os == "windows"){
-                system("cls");
-            }
-            else{
-                system("clear");
-            }
+            clearScreen(os);
         }
         // to echo a string in the console
         else if(command.rfind("echo ") == 0){
@@ -151,16 +144,12 @@ void command_function(){
         // echo to write in a file
         else if(command.rfind("write ") == 0){
             std::string echo_str = command.substr(command.find_first_of(" \t")+1);
-            std::string text = echo_str.substr(0, echo_str.find(' '));
-            std::string file = echo_str.substr(echo_str.find_first_of(" \t")+2);
-            writeFile(text.c_str(), file.c_str());
+            echoFile(echo_str);
         }
         // to create a file
         else if(command.rfind("touch ") == 0){
             std::string file_name=command.substr(command.find_first_of(" \t")+1);
-            std::ofstream createFile(file_name);
-            createFile.close();
-            std::cout<<file_name<<" created successfully!";
+            createFile(file_name);
         }
         // to come back of the directory
         else if(command == ".." || command == "cd .."){
@@ -168,64 +157,26 @@ void command_function(){
         }
         // to change directory
         else if(command.rfind("cd ") == 0){
-            std::string dir=command.substr(command.find_first_of(" \t")+1);
-            char directory[256];
-            strcpy(directory, dir.c_str());
-            chdir(directory);
+            std::string dir = command.substr(command.find_first_of(" \t")+1);
+            changeDir(dir);
         }
         // to list all the files in the directory
         else if(command == "ls" || command == "dir"){
-            if(os == "linux"){
-                system("ls");
-            }
-            else if(os == "windows"){
-                system("dir");
-            }
-            else{
-                system("ls");
-            }
+            listFiles(os);
         }
         // to delete a file or a folder
         else if(command.rfind("rm ") == 0){
-            std::string filename = command.substr(command.find_first_of(" \t") + 1);
-            char buf[60];
-            strcpy(buf,filename.c_str());
-            if(std::remove(buf)){
-                std::cout << filename << " wasn't deleted!";
-            }
-            else{   
-                std::cout<<filename<<" was deleted successfully!";
-            }
+            std::string file_name = command.substr(command.find_first_of(" \t") + 1);
+            delFileFolder(file_name);
         }
         // returns the current working directory
         else if(command == "pwd"){
-            if(os == "linux"){
-                system("pwd");
-            }
-            else if(os == "windows"){
-                system("cd");
-            }
-            else{
-                system("pwd");
-            }
+            pwd(os);
         }
         // to rename a file
         else if(command.rfind("rename ") == 0){
-            std::string filename = command.substr(command.find_first_of(" \t")+1);
-            char from[50];
-            strcpy(from, filename.c_str());
-            char to[50];
-            std::string newFile;
-            std::cout<<"Enter newfile name: ";
-            std::getline(std::cin, newFile);
-            strcpy(to, newFile.c_str());
-
-            if(std::rename(from, to)){
-                std::cout<<"File renaming was unsuccessful!";
-            }
-            else{
-                std::cout<<"File renamed successfully!";
-            }
+            std::string file_name = command.substr(command.find_first_of(" \t")+1);
+            renameFile(file_name);
         }
         // returns the user of the machine
         else if(command == "whoami"){
@@ -234,12 +185,7 @@ void command_function(){
         // creating a directory
         else if(command.rfind("mkdir ") == 0){
             std::string dir_name = command.substr(command.find_first_of(" \t")+1);
-            std::string dir_command = "mkdir ";
-            char* directory_name = const_cast<char*>(dir_name.c_str());
-            char* mkdir_command = const_cast<char*>(dir_command.c_str());
-            strcat(mkdir_command, directory_name);
-            system(mkdir_command);
-            std::cout<<directory_name<<" was successfully created!";
+            makeDir(dir_name);
 
         }
         // returns all the content of a file
@@ -250,18 +196,11 @@ void command_function(){
 
         // function to return the cpu info of the user's pc
         else if(command == "lscpu"){
-            if(os == "linux"){
-                system("lscpu");
-            }
-            else if(os == "windows"){
-                system("systeminfo");
-            }
+            cpuInfo(os);
         }
         // returns the coder of the ShellNU program
         else if(command == "credits"){
-            std::cout<<"--------------{+} Coded By Shujan Islam {+}--------------\n";
-            std::cout<<"--------------{+} https://shujanislam.github.io {+}--------------\n";
-            std::cout<<"--------{+}  https://github.com/shujanislam/ShellNU {+}--------\n";
+            credits();
         }
         // function to run and compile c, c++ and python files
         else if(command.rfind("c ") == 0){
@@ -281,17 +220,13 @@ void command_function(){
         // nano command to use nano text editor
         else if(command.rfind("nano ") == 0){
             std::string file_name = command.substr(command.find_first_of(" \t") + 1);
-            char nano_command[10] = "nano ";
-            strcat(nano_command, file_name.c_str());
-            system(nano_command);
+            nanoTextEditor(file_name);
         }
 
         //ffplay command to play a video file
         else if(command.rfind("ffplay ") == 0){
         	std::string file_name = command.substr(command.find_first_of(" \t") + 1);
-            char ffplay_command[10] = "ffplay ";
-            strcat(ffplay_command, file_name.c_str());
-            system(ffplay_command);
+            ffplay(file_name);
         }
 
         // nano command to open up nano editor
