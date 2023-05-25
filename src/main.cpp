@@ -1,4 +1,3 @@
-
 #include<iostream>          // for some basic stuff
 #include<unistd.h>          // for system stuff
 #include<map>               // for map 
@@ -20,6 +19,7 @@
 #endif
 
 // to get the current directory
+
 #ifdef WINDOWS
 #include <direct.h>
 #define GetCurrentDir _getcwd
@@ -31,35 +31,9 @@
 std::string get_current_dir() {
    char buff[FILENAME_MAX]; //create string buffer to hold path
    GetCurrentDir( buff, FILENAME_MAX );
-   string current_working_dir(buff);
+   std::string current_working_dir(buff);
    return current_working_dir;
 }
-
-// Map that contains all the help commands
-std::map<std::string, std::string> Help = {
-    {"v", "to check the version of the terminal"},
-    {"xt", "to exit the terminal"}, 
-    {"register", "to register your account"}, 
-    {"login", "to login as an admin"},
-    {"ls", "to look up all the files in the current directory"},
-    {"cd <destination>", "to change the directory"},
-    {"cd .. or ..", "to go back of the directory"},
-    {"touch <name>", "to create a new file"},
-    {"rm <name>", "to delete a file or a folder"},
-    {"pwd", "returns the current working directory"},
-    {"clear", "to clear the screen"},
-    {"echo <string>", "to display a string in the shell"},
-    {"rename <filename>", "to rename a filename"},
-    {"whoami", "returns the user of the machine"},
-    {"cat <filename>", "returns the content of a file"},
-    {"lscpu", "returns the cpu specifications"},
-    {"credits", "returns the creator of the ShellNU program"},
-    {"c <filename>", "compiles and runs a c program"},
-    {"cpp <filename>", "compiles and runs a c++ program"},
-    {"py <filename>", "compiles and runs a python program"},
-    {"nano <filename>", "to edit a file using nano text editor"},
-    {"ffplay <filename>", "to play a video file using ffplay"}
-};
 
 void command_function();    // function which will contain all the commands
 
@@ -73,7 +47,7 @@ int main(){
 
 }
 
-// the linux function starts here
+// the command function starts here
 void command_function(){
     std::string command;
 
@@ -91,47 +65,33 @@ void command_function(){
     // while loop to take command inputs until the user enters xt command to exit
     while(command != "xt"){
         if(os == "linux"){
-            std::cout << "\n\033[1;33muser\033[0m@\033[1;31mlinux\033[0m:~"<<get_current_dir()<<"\033[1;34m$\033[0m ";
+            std::cout << "\n\033[1;32muser@linux\033[0m:~"<<get_current_dir()<<"\033[1;34m$\033[0m ";
         }
         else if(os == "windows"){
-            std::cout << "\n\033[1;33muser\033[0m@\033[1;31mwindows\033[0m:~"<<get_current_dir()<<"\033[1;34m$\033[0m ";
+            std::cout << "\n\033[1;32muser@windows\033[0m:~"<<get_current_dir()<<"\033[1;34m$\033[0m ";
         }
         else{
-            std::cout << "\n\033[1;33muser\033[0m@\033[1;31muser\033[0m:~"<<get_current_dir()<<"\033[1;34m$\033[0m ";
+            std::cout << "\n\033[1;32muser@user\033[0m:~"<<get_current_dir()<<"\033[1;34m$\033[0m ";
         }
 
         std::getline(std::cin, command);
     
-        // to register an admin
-        if(command == "register"){
-            Admin admin_register;
-            std::cout<<"Enter your username: ";
-            std::cin>>admin_register.username;
-            std::cout<<"Enter your password: ";
-            std::cin>>admin_register.password;
-
-            registerUser(admin_register.username, admin_register.password);
-        }  
-        // to login using admin credentials
-        else if(command == "login"){
-            Admin admin_login;
-            std::cout<<"Enter your username: ";
-            std::cin>>admin_login.username;
-            std::cout<<"Enter your password: ";
-            std::cin>>admin_login.password;
-
-            loginUser(admin_login.username, admin_login.password);
+        // to retrieve all the help commands
+        if(command == "help"){
+            for(auto itr = Help.begin(); itr != Help.end(); itr++){
+                std::cout<<(*itr).first<<" : "<<(*itr).second<<"\n\n";
+            }
         }
         // to check the version of ShellNU
         else if(command == "v"){
             shellVersion();
         }
-        // to retrieve all the help commands
-        else if(command == "help"){
-            for(auto itr = Help.begin(); itr != Help.end(); itr++){
-                std::cout<<(*itr).first<<" : "<<(*itr).second<<"\n\n";
-            }
+
+        // to show the introduction of ShellNU
+        else if(command == "shellnu"){
+            shellNUIntro();
         }
+
         // to clear the screen
         else if(command == "clear" || command == "cls"){
             clearScreen(os);
@@ -223,6 +183,12 @@ void command_function(){
             nanoTextEditor(file_name);
         }
 
+        // vim command to use vim text editor
+        else if(command.rfind("vim ") == 0){
+            std::string file_name = command.substr(command.find_first_of(" \t") + 1);
+            vimTextEditor(file_name);
+        }
+
         //ffplay command to play a video file
         else if(command.rfind("ffplay ") == 0){
         	std::string file_name = command.substr(command.find_first_of(" \t") + 1);
@@ -232,6 +198,21 @@ void command_function(){
         // nano command to open up nano editor
         else if(command == "nano"){
             system("nano");
+        }
+
+        // vim command to open up vim editor
+        else if(command == "vim"){
+            system("vim");
+        }
+
+        // start command to open up a new ShellNU window
+        else if(command == "nw"){
+            startNewWindow();
+        }
+
+        // start command to open up a new ShellNU tab
+        else if(command == "nt"){
+            startNewTab();
         }
     }
 

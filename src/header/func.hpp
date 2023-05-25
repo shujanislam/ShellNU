@@ -3,10 +3,39 @@
 #include<algorithm>     // for algorithmic stuff
 #include<fstream>       // for file stuff
 #include<string>        // for functions like substr()
+#include<map>           // for map 
+
+// Map that contains all the help commands
+std::map<std::string, std::string> Help = {
+    {"shellnu", "to display the introduction of ShellNU"},
+    {"nw", "to start a new ShellNU window"},
+    {"nt", "to start a new ShellNU tab"},
+    {"v", "to check the version of the terminal"},
+    {"xt", "to exit the terminal"},
+    {"ls", "to look up all the files in the current directory"},
+    {"cd <destination>", "to change the directory"},
+    {"cd .. or ..", "to go back of the directory"},
+    {"touch <name>", "to create a new file"},
+    {"rm <name>", "to delete a file or a folder"},
+    {"pwd", "returns the current working directory"},
+    {"clear", "to clear the screen"},
+    {"echo <string>", "to display a string in the shell"},
+    {"rename <filename>", "to rename a filename"},
+    {"whoami", "returns the user of the machine"},
+    {"cat <filename>", "returns the content of a file"},
+    {"lscpu", "returns the cpu specifications"},
+    {"credits", "returns the creator of the ShellNU program"},
+    {"c <filename>", "compiles and runs a c program"},
+    {"cpp <filename>", "compiles and runs a c++ program"},
+    {"py <filename>", "compiles and runs a python program"},
+    {"nano <filename>", "to edit a file using nano text editor"},
+    {"vim <filename>", "to edit a file using vim text editor"},
+    {"ffplay <filename>", "to play a video file using ffplay"}
+};
 
 // function to show the version of the shell
 void shellVersion(){
-	std::cout<<"Version: 0.0.3\nCopyright@2023";
+	std::cout<<"ShellNU version: 0.0.3\n";
 }
 
 // function to clear the screen
@@ -74,9 +103,16 @@ void ffplay(std::string file_name){
 
 // function to open nano text editor
 void nanoTextEditor(std::string file_name){
-	char nano_command[10] = "nano ";
+	char nano_command[50] = "gnome-terminal -- nano ";
     strcat(nano_command, file_name.c_str());
     system(nano_command);
+}
+
+// function to open vim text editor
+void vimTextEditor(std::string file_name){
+    char vim_command[50] = "gnome-terminal -- vim ";
+    strcat(vim_command, file_name.c_str());
+    system(vim_command);
 }
 
 // function to make a directory
@@ -138,4 +174,24 @@ void echoFile(std::string echo_str){
 	std::string text = echo_str.substr(0, echo_str.find(' '));
     std::string file = echo_str.substr(echo_str.find_first_of(" \t")+2);
     writeFile(text.c_str(), file.c_str());
+}
+
+// function to display the introduction of ShellNU
+void shellNUIntro(){
+    shellVersion();
+    std::cout<<"ShellNU is a free and open source terminal emulator\n";
+    std::cout<<"type help (for help)\n";
+    std::cout<<"type xt (to exit)\n";
+}
+
+// function to open up a new ShellNU window
+void startNewWindow(){
+    char startNewWindow[50] = "gnome-terminal -- ./ShellNU ";
+    system(startNewWindow);
+}
+
+// function to open up a new ShellNU tab
+void startNewTab(){
+    char startNewTab[50] = "gnome-terminal --tab -- ./ShellNU ";
+    system(startNewTab);
 }
