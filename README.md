@@ -50,6 +50,27 @@ make
 ./ShellNU
 ```
 
+## Configuration File
+
+ShellNU uses a configuration file (shellnu.config) for storing user-specific configurations. It allows for customizations such as the username and profile type.
+
+### Configuration File Format
+
+The configuration file (shellnu.config) can contain the following entries:
+
+user: The username that will be displayed in the terminal prompt.
+
+profile: Defines the user profile.
+
+command_log: Logging all the commands in a 'log.txt' file.
+
+### Example
+
+```sh
+user = shujan
+profile = user
+command_log = true
+```
 
 ## License
 

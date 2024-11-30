@@ -2,9 +2,12 @@
 #include<unistd.h>          // for system stuff
 #include<map>               // for map 
 #include<stdlib.h>
+#include<fstream>           // for reading file
 #include<string>            // for some basic functions like substr()
+#include<sstream>           // to read file contents
 #include "header/file.h"    // header file that contains login/register functions
 #include "header/func.hpp"    // header file that contains all the shell functions
+#include "header/config.hpp"  // header file for custom configurations
 
 // checking if the Operating System is Windows or Linux
 
@@ -62,20 +65,25 @@ void command_function(){
         system("clear");
     }
 
+    std::string user = username();
+
     // while loop to take command inputs until the user enters xt command to exit
     while(command != "xt"){
         if(os == "linux"){
-            std::cout << "\n\033[1;32muser@linux\033[0m:~"<<get_current_dir()<<"\033[1;34m$\033[0m ";
+            std::cout << "\n\033[1;32m"<<user<<"@linux\033[0m:~"<<get_current_dir()<<"\033[1;34m$\033[0m ";
         }
         else if(os == "windows"){
-            std::cout << "\n\033[1;32muser@windows\033[0m:~"<<get_current_dir()<<"\033[1;34m$\033[0m ";
+            std::cout << "\n\033[1;32m"<<user<<"@windows\033[0m:~"<<get_current_dir()<<"\033[1;34m$\033[0m ";
         }
         else{
-            std::cout << "\n\033[1;32muser@user\033[0m:~"<<get_current_dir()<<"\033[1;34m$\033[0m ";
+            std::cout << "\n\033[1;32m"<<user<<"@user\033[0m:~"<<get_current_dir()<<"\033[1;34m$\033[0m ";
         }
 
         std::getline(std::cin, command);
-    
+
+        // Logging all the commands
+        commandLog(command);
+
         // to retrieve all the help commands
         if(command == "help"){
             for(auto itr = Help.begin(); itr != Help.end(); itr++){
